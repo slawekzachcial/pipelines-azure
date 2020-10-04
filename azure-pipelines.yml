@@ -4,16 +4,27 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+      - '*'
+    exclude:
+      - 'gh-pages'
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  - script: echo 'Check the spelling of markdown files.'
+    displayName: 'Check Spelling'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - script: echo 'Check the links in markdown files.'
+    displayName: 'Check Links'
+
+  - script: echo 'Create Git tag.'
+    displayName: 'Tag Release'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+
+  - script: echo "Deploy website."
+    displayName: 'Deploy'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
