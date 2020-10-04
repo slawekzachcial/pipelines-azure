@@ -11,5 +11,3 @@ The deployment consists of putting the content of the `main` branch into
 ## Spell Check
 
 The pipeline will check the spelling of all markdown files in this repository.
-
-This is seplingg error.
