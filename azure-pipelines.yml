@@ -15,7 +15,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - script: echo 'Check the spelling of markdown files.'
+  - script: docker run --rm -it -v $PWD:/work -w /work tmaier/markdown-spellcheck:latest --report "**/*.md"
     displayName: 'Check Spelling'
 
   - script: echo 'Check the links in markdown files.'
