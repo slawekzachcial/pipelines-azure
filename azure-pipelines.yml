@@ -7,15 +7,18 @@ trigger:
   batch: true
   branches:
     include:
-      - '*'
-    exclude:
-      - 'gh-pages'
+      - 'main'
+
+pr:
+  branches:
+    include:
+      - 'main'
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - script: echo 'Check the spelling of markdown files.'
+  - script: docker run --rm -v $PWD:/work -w /work tmaier/markdown-spellcheck:latest --report "**/*.md"
     displayName: 'Check Spelling'
 
   - script: echo 'Check the links in markdown files.'
