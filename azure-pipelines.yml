@@ -63,6 +63,6 @@ steps:
   - task: Bash@3
     inputs:
       filePath: pipeline.sh
-      arguments: deployPages $(Build.BuildNumber) $(releaseVersion)
+      arguments: deployPages $(Build.SourceVersion) $(releaseVersion)
     displayName: 'Deploy GitHub Pages'
     condition: and(succeeded(), eq(variables.isMain, true), eq(variables.shouldDeploy, true))
