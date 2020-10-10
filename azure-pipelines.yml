@@ -54,6 +54,6 @@ steps:
       && git restore --source $(Build.SourceVersion) README.md \
       && git commit -am "Deploy new release" \
       && git push \
-      && git switch -
+      && git switch --detach -
     displayName: 'Deploy Release'
     condition: and(succeeded(), eq(variables.isMain, true))
