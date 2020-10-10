@@ -33,7 +33,7 @@ steps:
 
   - script: echo "Create Release."
     displayName: 'Release'
-    condition: and(succeeded(), eq(variables.isMain, true), eq(variables.isNewRelease, 'yes')
+    condition: and(succeeded(), eq(variables.isMain, true), eq(variables.isNewRelease, 'yes'))
 
   # - task: GitHubRelease@0
   #   displayName: 'Create Release'
