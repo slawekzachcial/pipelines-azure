@@ -15,3 +15,8 @@ The pipeline will check the spelling of all markdown files in this repository.
 ## Link Check
 
 The pipeline will check the links of all markdown files in this repository.
+
+## Release Creation
+
+The pipeline, when run on `main` branch will create a new Git tag and GitHub
+release.
