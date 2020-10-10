@@ -52,6 +52,11 @@ steps:
     condition: and(succeeded(), eq(variables.isMain, true), eq(variables.releaseVersion, ''))
 
   - script: |
+      echo "##vso[task.setvariable variable=shouldDeploy]$(git diff gh-pages -- quiet -- README.md || echo True)"
+    displayName: 'Should Deploy Pages?'
+    condition: and(succeeded(), eq(variables.isMain, true))
+
+  - script: |
       git config user.email slawekzachcial.pipelines-azure@dev.azure.com
       git config user.name 'Azure Pipelines'
       git status
@@ -59,5 +64,5 @@ steps:
       && git restore --source $(Build.SourceVersion) README.md \
       && { git diff --quiet || { git commit -am "Deploy new release: $(releaseVersion)" && git push; } } \
       && git switch --detach  -
-    displayName: 'Deploy Release'
-    condition: and(succeeded(), eq(variables.isMain, true))
+    displayName: 'Deploy GitHub Pages'
+    condition: and(succeeded(), eq(variables.isMain, true), eq(variables.shouldDeploy, true))
