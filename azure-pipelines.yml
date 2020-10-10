@@ -28,8 +28,7 @@ steps:
     displayName: 'Check Spelling'
 
   - script: |
-      shopt -s globstar; \
-      ls -la; \
+      shopt -s globstar
       echo **/*.md | xargs -n1 docker run --rm -v $(pwd):/work:ro -w /work robertbeal/markdown-link-checker
     displayName: 'Check Links'
 
@@ -47,13 +46,12 @@ steps:
       tagSource: manual
 
   - script: |
-      git status \
-      && git switch gh-pages \
-      && git config user.email slawekzachcial.pipelines-azure@dev.azure.com \
-      && git config user.name 'Azure Pipelines' \
+      git config user.email slawekzachcial.pipelines-azure@dev.azure.com
+      git config user.name 'Azure Pipelines'
+      git status
+      git switch gh-pages \
       && git restore --source $(Build.SourceVersion) README.md \
-      && git commit -am "Deploy new release" \
-      && git push \
-      && git switch --detach -
+      && { git diff --quiet || { git commit -am "Deploy new release" && git push; } } \
+      && git switch --detach  -
     displayName: 'Deploy Release'
     condition: and(succeeded(), eq(variables.isMain, true))
