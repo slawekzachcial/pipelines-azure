@@ -42,7 +42,7 @@ steps:
 
   - script: |
       git switch gh-pages \
-      && git restore --source main README.md \
+      && git restore --source refs/heads/main README.md \
       && git commit -am "Deploy new release" \
       && git push \
       && git switch -
