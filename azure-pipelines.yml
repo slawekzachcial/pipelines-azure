@@ -26,7 +26,7 @@ steps:
 
   - script: |
       shopt -s globstar; \
-      ls **/*.md; \
+      ls -la; \
       echo **/*.md | xargs -n1 docker run --rm -v $(pwd):/work:ro -w /work robertbeal/markdown-link-checker
     displayName: 'Check Links'
 
