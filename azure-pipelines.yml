@@ -30,6 +30,7 @@ steps:
     inputs:
       gitHubConnection: 'github.com_slawekzachcial'
       tag: $(Build.BuildNumber)
+      tagSource: manual
 
   - script: echo "Deploy website."
     displayName: 'Deploy'
