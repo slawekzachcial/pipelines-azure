@@ -41,8 +41,9 @@ steps:
       tagSource: manual
 
   - script: |
+      git status && \
       git switch gh-pages \
-      && git restore --source refs/heads/main README.md \
+      && git restore --source origin/main README.md \
       && git commit -am "Deploy new release" \
       && git push \
       && git switch -
