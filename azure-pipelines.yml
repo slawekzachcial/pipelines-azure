@@ -24,16 +24,20 @@ steps:
   - checkout: self
     persistCredentials: true
 
-  - script: docker run --rm -v $(pwd):/work:ro -w /work tmaier/markdown-spellcheck:latest --report "**/*.md"
+  - task: Bash@3
+    inputs:
+      filePath: pipeline.sh
+      arguments: checkSpelling
     displayName: 'Check Spelling'
 
-  - script: |
-      shopt -s globstar
-      echo **/*.md | xargs -n1 docker run --rm -v $(pwd):/work:ro -w /work robertbeal/markdown-link-checker
+  - task: Bash@3
+    inputs:
+      filePath: pipeline.sh
+      arguments: checkLinks
     displayName: 'Check Links'
 
   - script: |
-      echo "##vso[task.setvariable variable=releaseVersion]$(git describe --tags --exact-match $(Build.SourceVersion) 2>/dev/null)"
+      echo "##vso[task.setvariable variable=releaseVersion]$(./pipeline.sh getReleaseTag $(Build.SourceVersion))"
     displayName: 'Get Release Version'
 
   - task: GitHubRelease@0
@@ -52,17 +56,13 @@ steps:
     condition: and(succeeded(), eq(variables.isMain, true), eq(variables.releaseVersion, ''))
 
   - script: |
-      echo "##vso[task.setvariable variable=shouldDeploy]$(git diff origin/gh-pages --quiet -- README.md || echo True)"
+      echo "##vso[task.setvariable variable=shouldDeploy]$(./pipeline.sh shouldDeploy && echo True)"
     displayName: 'Should Deploy Pages?'
     condition: and(succeeded(), eq(variables.isMain, true))
 
-  - script: |
-      git config user.email slawekzachcial.pipelines-azure@dev.azure.com
-      git config user.name 'Azure Pipelines'
-      git status
-      git switch gh-pages \
-      && git restore --source $(Build.SourceVersion) README.md \
-      && { git diff --quiet || { git commit -am "Deploy new release: $(releaseVersion)" && git push; } } \
-      && git switch --detach  -
+  - task: Bash@3
+    inputs:
+      filePath: pipeline.sh
+      arguments: $(Build.BuildNumber) $(releaseVersion)
     displayName: 'Deploy GitHub Pages'
     condition: and(succeeded(), eq(variables.isMain, true), eq(variables.shouldDeploy, true))
