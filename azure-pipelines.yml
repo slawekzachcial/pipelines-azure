@@ -50,7 +50,7 @@ steps:
       git status
       git switch gh-pages \
       && git restore --source $(Build.SourceVersion) README.md \
-      && { git diff --quiet || { git commit -am "Deploy new release: $(variables.releaseVersion)" && git push; } } \
+      && { git diff --quiet || { git commit -am "Deploy new release: $(releaseVersion)" && git push; } } \
       && git switch --detach  -
     displayName: 'Deploy Release'
     condition: and(succeeded(), eq(variables.isMain, true))
