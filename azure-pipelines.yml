@@ -24,7 +24,10 @@ steps:
   - script: docker run --rm -v $(pwd):/work:ro -w /work tmaier/markdown-spellcheck:latest --report "**/*.md"
     displayName: 'Check Spelling'
 
-  - script: shopt -s globstar; echo **/*.md | xargs -n1 docker run --rm -v $(pwd):/work:ro -w /work robertbeal/markdown-link-checker
+  - script: |
+      shopt -s globstar; \
+      ls **/*.md; \
+      echo **/*.md | xargs -n1 docker run --rm -v $(pwd):/work:ro -w /work robertbeal/markdown-link-checker
     displayName: 'Check Links'
 
   # Use yes/no value for the variable to avoid confusion with conversion between string and boolean
