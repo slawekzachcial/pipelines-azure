@@ -25,5 +25,6 @@ commit.
 ## Release Deployment
 
 The pipeline, when run on `main` branch, deploys release by copying markdown
-files into `gh-pages` branch. The commit message in `gh-pages` branch contains
-the release version number.
+files into `gh-pages` branch. The deployment happens only if the markdown files
+have been updated. The commit message in `gh-pages` branch contains the release
+version number.
