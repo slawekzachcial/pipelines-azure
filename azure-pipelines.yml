@@ -27,21 +27,18 @@ steps:
   - script: shopt -s globstar; echo **/*.md | xargs -n1 docker run --rm -v $(pwd):/work:ro -w /work robertbeal/markdown-link-checker
     displayName: 'Check Links'
 
+  # Use yes/no value for the variable to avoid confusion with conversion between string and boolean
   - script: |
       echo "##vso[task.setvariable variable=isNewRelease]$(git describe --tags --exact-match HEAD &>/dev/null && echo no || echo yes)"
-    displayName: 'Check if new release being created'
+    displayName: 'Is New Release?'
 
-  - script: echo "Create Release."
-    displayName: 'Release'
+  - task: GitHubRelease@0
+    displayName: 'Create Release'
     condition: and(succeeded(), eq(variables.isMain, true), eq(variables.isNewRelease, 'yes'))
-
-  # - task: GitHubRelease@0
-  #   displayName: 'Create Release'
-  #   condition: and(succeeded(), eq(variables.isMain, true))
-  #   inputs:
-  #     gitHubConnection: 'github.com_slawekzachcial'
-  #     tag: $(Build.BuildNumber)
-  #     tagSource: manual
+    inputs:
+      gitHubConnection: 'github.com_slawekzachcial'
+      tag: $(Build.BuildNumber)
+      tagSource: manual
 
   - script: echo "Deploy website."
     displayName: 'Deploy'

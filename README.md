@@ -18,5 +18,6 @@ The pipeline will check the links of all markdown files in this repository.
 
 ## Release Creation
 
-The pipeline, when run on `main` branch will create a new Git tag and GitHub
-release.
+The pipeline, when run on `main`, branch will create a new Git tag and GitHub
+release. A new release will be created only one does not exist yet for the given
+commit.
