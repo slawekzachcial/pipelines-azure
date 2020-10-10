@@ -10,18 +10,20 @@ The deployment consists of putting the content of the `main` branch into
 
 ## Spell Check
 
-The pipeline will check the spelling of all markdown files in this repository.
+The pipeline checks the spelling of all markdown files in this repository.
 
 ## Link Check
 
-The pipeline will check the links of all markdown files in this repository.
+The pipeline checks the links of all markdown files in this repository.
 
 ## Release Creation
 
-The pipeline, when run on `main` branch, will create a new Git tag and GitHub
-release. A new release will be created only one does not exist yet for the given
+The pipeline, when run on `main` branch, creates a new Git tag and GitHub
+release. A new release is created only if one does not exist yet for the given
 commit.
 
 ## Release Deployment
-The pipeline, when run on `main` branch, will deploy release by copying markdown
-files into `gh-pages` branch.
+
+The pipeline, when run on `main` branch, deploys release by copying markdown
+files into `gh-pages` branch. The commit message in `gh-pages` branch contains
+the release version number.
