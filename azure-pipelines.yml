@@ -43,6 +43,8 @@ steps:
   - script: |
       git status && \
       git switch gh-pages \
+      && git config user.email slawekzachcial.pipelines-azure@dev.azure.com \
+      && git config user.name 'Azure Pipelines' \
       && git restore --source origin/main README.md \
       && git commit -am "Deploy new release" \
       && git push \
