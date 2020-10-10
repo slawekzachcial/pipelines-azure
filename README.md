@@ -27,4 +27,3 @@ commit.
 The pipeline, when run on `main` branch, deploys release by copying markdown
 files into `gh-pages` branch. The commit message in `gh-pages` branch contains
 the release version number.
-

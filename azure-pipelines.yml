@@ -44,6 +44,13 @@ steps:
       tag: $(Build.BuildNumber)
       tagSource: manual
 
+  # `releaseVersion` either already has value coming from tag or is set to BuildNumber
+  # so that proper commit message can be specified in gh-pages branch.
+  - script: |
+      echo "##vso[task.setvariable variable=releaseVersion]$(Build.BuildNumber)"
+    displayName: 'Set Release Version'
+    condition: and(succeeded(), eq(variables.isMain, true), eq(variables.releaseVersion, ''))
+
   - script: |
       git config user.email slawekzachcial.pipelines-azure@dev.azure.com
       git config user.name 'Azure Pipelines'
