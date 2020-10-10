@@ -17,6 +17,9 @@ pr:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
 steps:
   - script: docker run --rm -v $(pwd):/work:ro -w /work tmaier/markdown-spellcheck:latest --report "**/*.md"
     displayName: 'Check Spelling'
@@ -24,14 +27,22 @@ steps:
   - script: shopt -s globstar; echo **/*.md | xargs -n1 docker run --rm -v $(pwd):/work:ro -w /work robertbeal/markdown-link-checker
     displayName: 'Check Links'
 
-  - task: GitHubRelease@0
-    displayName: 'Create Release'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    inputs:
-      gitHubConnection: 'github.com_slawekzachcial'
-      tag: $(Build.BuildNumber)
-      tagSource: manual
+  - script: |
+      echo "##vso[task.setvariable variable=isNewRelease]$(git describe --tags --exact-match HEAD &>/dev/null && echo no || echo yes)"
+    displayName: 'Check if new release being created'
+
+  - script: echo "Create Release."
+    displayName: 'Release'
+    condition: and(succeeded(), eq(variables.isMain, true), eq(variables.isNewRelease, 'yes')
+
+  # - task: GitHubRelease@0
+  #   displayName: 'Create Release'
+  #   condition: and(succeeded(), eq(variables.isMain, true))
+  #   inputs:
+  #     gitHubConnection: 'github.com_slawekzachcial'
+  #     tag: $(Build.BuildNumber)
+  #     tagSource: manual
 
   - script: echo "Deploy website."
     displayName: 'Deploy'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), eq(variables.isMain, true))
