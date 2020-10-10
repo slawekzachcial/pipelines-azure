@@ -21,6 +21,9 @@ variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
 steps:
+  - checkout: self
+    persistCredentials: true
+
   - script: docker run --rm -v $(pwd):/work:ro -w /work tmaier/markdown-spellcheck:latest --report "**/*.md"
     displayName: 'Check Spelling'
 
@@ -43,12 +46,9 @@ steps:
       tag: $(Build.BuildNumber)
       tagSource: manual
 
-  - checkout: self
-    persistCredentials: true
-
   - script: |
-      git status && \
-      git switch gh-pages \
+      git status \
+      && git switch gh-pages \
       && git config user.email slawekzachcial.pipelines-azure@dev.azure.com \
       && git config user.name 'Azure Pipelines' \
       && git restore --source $(Build.SourceVersion) README.md \
