@@ -28,7 +28,7 @@ steps:
     displayName: 'Create Release'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     inputs:
-      gitHubConnection: 'slawekzachcial'
+      gitHubConnection: 'github.com_slawekzachcial'
       tag: $(Build.BuildNumber)
 
   - script: echo "Deploy website."
