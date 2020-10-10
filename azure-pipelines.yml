@@ -40,6 +40,11 @@ steps:
       tag: $(Build.BuildNumber)
       tagSource: manual
 
-  - script: echo "Deploy website."
-    displayName: 'Deploy'
+  - script: |
+      git switch gh-pages \
+      && git restore --source main README.md \
+      && git commit -am "Deploy new release" \
+      && git push \
+      && git switch -
+    displayName: 'Deploy Release'
     condition: and(succeeded(), eq(variables.isMain, true))
