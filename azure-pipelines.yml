@@ -52,7 +52,7 @@ steps:
     condition: and(succeeded(), eq(variables.isMain, true), eq(variables.releaseVersion, ''))
 
   - script: |
-      echo "##vso[task.setvariable variable=shouldDeploy]$(git diff gh-pages --quiet -- README.md || echo True)"
+      echo "##vso[task.setvariable variable=shouldDeploy]$(git diff origin/gh-pages --quiet -- README.md || echo True)"
     displayName: 'Should Deploy Pages?'
     condition: and(succeeded(), eq(variables.isMain, true))
 
