@@ -40,12 +40,15 @@ steps:
       tag: $(Build.BuildNumber)
       tagSource: manual
 
+  - checkout: self
+    persistCredentials: true
+
   - script: |
       git status && \
       git switch gh-pages \
       && git config user.email slawekzachcial.pipelines-azure@dev.azure.com \
       && git config user.name 'Azure Pipelines' \
-      && git restore --source origin/main README.md \
+      && git restore --source $(Build.SourceVersion) README.md \
       && git commit -am "Deploy new release" \
       && git push \
       && git switch -
